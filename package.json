@@ -1,0 +1,27 @@
+{
+  "name": "tactus",
+  "version": "0.1.0",
+  "description": "Synthesized, premium UI sound effects for Svelte & Astro. Zero audio files — everything is generated with the Web Audio API.",
+  "type": "module",
+  "sideEffects": false,
+  "license": "MIT",
+  "files": ["dist", "src/astro"],
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" },
+    "./svelte": { "types": "./dist/svelte.d.ts", "svelte": "./dist/svelte.js", "default": "./dist/svelte.js" },
+    "./auto": { "types": "./dist/auto.d.ts", "default": "./dist/auto.js" },
+    "./astro": "./src/astro/Tactus.astro",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "tsup",
+    "verify": "node scripts/verify.mjs",
+    "demo": "node scripts/build-demo.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "playwright": "^1.50.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.0"
+  }
+}

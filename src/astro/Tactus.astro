@@ -1,0 +1,48 @@
+---
+/**
+ * Drop once into your base layout:
+ *
+ *   ---
+ *   import Tactus from 'tactus/astro';
+ *   ---
+ *   <body>
+ *     <slot />
+ *     <Tactus theme="cozy" volume={0.7} />
+ *   </body>
+ *
+ * Then mark elements with data-sound="button" | "link" | "card" | "toggle" | …
+ */
+export interface Props {
+  theme?: 'cozy' | 'crystal' | 'felt' | (string & {});
+  volume?: number;
+  muted?: boolean;
+  spatial?: number;
+  humanize?: number;
+}
+const { theme, volume, muted, spatial, humanize } = Astro.props;
+const config = JSON.stringify({ theme, volume, muted, spatial, humanize });
+---
+
+<tactus-config data-config={config} hidden></tactus-config>
+
+<script>
+  import { autoBind } from 'tactus/auto';
+
+  const readConfig = () => {
+    const el = document.querySelector('tactus-config') as HTMLElement | null;
+    if (!el) return {};
+    try {
+      const raw = JSON.parse(el.dataset.config || '{}');
+      return Object.fromEntries(Object.entries(raw).filter(([, v]) => v !== undefined && v !== null));
+    } catch {
+      return {};
+    }
+  };
+
+  autoBind(readConfig());
+  // keep theme/volume in sync after View Transitions swaps (never override the user's mute choice)
+  document.addEventListener('astro:page-load', () => {
+    const { muted, ...rest } = readConfig() as Record<string, unknown>;
+    autoBind(rest);
+  });
+</script>
